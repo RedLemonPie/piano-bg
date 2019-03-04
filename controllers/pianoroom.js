@@ -2,7 +2,6 @@ const PianoroomModel = require('../modules/pianoRoom')
 const statusCode = require('../util/status-code')
 
 class pianoroomController {
-
   /**
    * 获取qingfang列表
    * @returns {Promise.<void>}

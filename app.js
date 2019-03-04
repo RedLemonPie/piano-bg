@@ -39,6 +39,8 @@ app.use(jwt({secret: secret.sign}).unless({
         /^\/api\/v1\/user\/register/,
         // 分类列表
         /^\/api\/v1\/category\/list/,
+        // 空闲琴房
+        /^\/api\/v1\/freeroom\/list/,
         // 文章搜索
         /^\/api\/v1\/article\/search/,
         // 分类

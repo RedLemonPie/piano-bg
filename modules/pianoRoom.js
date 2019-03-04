@@ -14,6 +14,18 @@ class PianoroomModel {
       attributes: ['room_id', 'room_name','room_status'],
     })
   }
+    /**
+     * 获取琴房数量
+     * @returns {Promise<*>}
+     */
+    static async getActiveRoomCount() {
+        return await PianoRoom.count({
+            where:{
+                room_status: 1
+            }
+        })
+    }
+
   /**
    * 获取分类详情数据
    * @param id  文章ID

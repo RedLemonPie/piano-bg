@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const Sequelize = db.sequelize;
 const Freeroom = Sequelize.import('../schema/freeRoom');
+const Pianoroom = Sequelize.import('../schema/pianoRoom');
 
 Freeroom.sync({force: false});
 
@@ -11,7 +12,9 @@ class FreeroomModel {
    */
   static async getFreeroomList() {
     return await Freeroom.findAll({
-      attributes: ['room_id', 'room_name','room_status'],
+        where: {
+            freeroom_status: 0
+        }
     })
   }
 
@@ -27,6 +30,22 @@ class FreeroomModel {
           },
       })
   }
+    /**
+     * 去库存
+     * @param id  分类ID
+     * @param data  事项的状态
+     * @returns {Promise.<boolean>}
+     */
+    static async SubtractFreeroom (freeroom_id,num) {
+        await Freeroom.update({
+            freeroom_last: num
+        }, {
+            where: {
+                freeroom_id
+            },
+        });
+        return true
+    }
   /**
     * 更新
     * @param id  分类ID
@@ -56,8 +75,21 @@ class FreeroomModel {
           piano_name: data.piano_name
       })
   }
+    /**
+     * 批量创建
+     * @param data
+     * @returns {Promise<*>}
+     */
+    static async createFreeroomList(roomcount,starttimeStamp,endtimeStamp) {
+         return Freeroom.create({
+             freeroom_starttime  : starttimeStamp,
+             freeroom_endtime: endtimeStamp,
+             freeroom_last: roomcount
+        })
+    }
 
-  /**
+
+    /**
    * 删除房间
    * @param room_id
    * @returns {Promise.<boolean>}

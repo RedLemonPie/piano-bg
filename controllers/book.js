@@ -12,35 +12,44 @@ class bookController {
      */
     static async create(ctx) {
         let req = ctx.request.body;
-
-        if (req.title
-            && req.author
-            && req.introduce
+        if (req.id
+            && req.freeroom_id
         ) {
             try {
                 // 查询分类是否存在
-                let categoryDetail = await Category.findOne({
-                    where: {
-                        name: req.category,
-                    },
-                });
-                if (categoryDetail) {
-                    req.categoryId = categoryDetail.id;
-
-                } else {
+                let checkHasBook = await BookModel.checkHasBook(req.id,req.freeroom_id)
+                console.log(checkHasBook)
+                if (checkHasBook.length<1) {
+                    try {
+                        console.log(checkHasBook+"111")
+                        let checkLast = await FreeroomModel.getFreeroomDetail(req.freeroom_id)
+                        if (checkLast.freeroom_last > 0) {
+                            await FreeroomModel.SubtractFreeroom( req.freeroom_id , parseInt(checkLast.freeroom_last)-1 )
+                            await BookModel.createBook(req.freeroom_id, req.id, checkLast.freeroom_last)
+                            ctx.response.status = 200;
+                            ctx.body = statusCode.SUCCESS_200('添加成功');
+                        } else {
+                            ctx.response.status = 412;
+                            ctx.body = statusCode.ERROR_412({
+                                msg: '手慢了'
+                            })
+                            return false;
+                        }
+                    } catch (err) {
+                        ctx.response.status = 412;
+                        ctx.body = statusCode.ERROR_412({
+                            msg: '请检查参数11！',
+                            err
+                        })
+                    }
+                }
+                else {
                     ctx.response.status = 412;
                     ctx.body = statusCode.ERROR_412({
-                        msg: '缺少此文章分类，请重新创建分类: ' + req.category
+                        msg: '您已经预定过该班次'
                     })
                     return false;
                 }
-
-                const ret = await ArticleModel.createArticle(req);
-                const data = await ArticleModel.getArticleDetail(ret.id);
-
-                ctx.response.status = 200;
-                ctx.body = statusCode.SUCCESS_200('创建文章成功', data);
-
             } catch (err) {
                 ctx.response.status = 412;
                 ctx.body = statusCode.ERROR_412({
@@ -51,8 +60,36 @@ class bookController {
         } else {
             ctx.response.status = 412;
             ctx.body = statusCode.ERROR_412({
-                msg: '请检查参数2！'
+                msg: '请检查参数！'
             })
+        }
+    }
+
+    /**
+     * 确认是否有票
+     * @param ctx
+     * @returns {Promise.<void>}
+     */
+    static async checkfreeroom(ctx) {
+        let book_id = ctx.params.user_id;
+        if (book_id) {
+            try {
+                let data = await BookModel.getBookDetail(book_id);
+                ctx.response.status = 200;
+                ctx.body = statusCode.SUCCESS_200('查询成功！', {
+                    data
+                });
+
+            } catch (err) {
+                ctx.response.status = 412;
+                ctx.body = statusCode.ERROR_412({
+                    mgs: '查询失败',
+                    err,
+                })
+            }
+        } else {
+            ctx.response.status = 412;
+            ctx.body = statusCode.ERROR_412('用户ID必须传');
         }
     }
 

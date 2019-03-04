@@ -6,9 +6,9 @@ const Book = Sequelize.import('../schema/book');
 const Pianoroom = Sequelize.import('../schema/pianoRoom');
 
 Book.hasOne(Pianoroom, {foreignKey: 'room_id'});
-Book.hasOne(FreeRoom, {foreignKey: 'freeroom_id'});
-
+Book.hasMany(FreeRoom, {foreignKey: 'freeroom_id'});
 Book.sync({force: false});
+
 
 class BookModel {
     /**
@@ -16,14 +16,14 @@ class BookModel {
      * @param data
      * @returns {Promise<*>}
      */
-    static async createBook(data) {
+
+    static async createBook(freeroom_id,user_id,pianoroom_id) {
         return await Book.create({
-            freeroom_id: data.freeroom_id,
-            user_id: data.user_id,
-            pianoroom_id: data.pianoroom_id,
+            freeroom_id,
+            user_id,
+            pianoroom_id
         })
     }
-
     /**
      * 更新文章数据
      * @param id  用户ID
@@ -146,7 +146,19 @@ class BookModel {
             },
         })
     }
-
+    /**
+     * 验证是否已经预定
+     * @param id  freeroom_id
+     * @returns {Promise<Model>}
+     */
+    static async checkHasBook(user_id,freeroom_id) {
+        return await Book.findAll({
+            where: {
+                user_id,
+                freeroom_id
+            },
+        })
+    }
     /**
      * 获取文章详情数据
      * @param id  文章ID

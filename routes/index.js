@@ -41,14 +41,18 @@ router.put('/pianoroom/update/:room_id', PianoroomController.update);
 
 //获取琴房
 router.get('/freeroom/list', FreeroomController.getfreeroomlist);
+//每日添加  总时间 间隔
+router.post('/freeroom/dailycreate', FreeroomController.createlistdaily);
 //获取琴房
-// router.get('/freeroom/detail/:room_id', FreeroomController.detail);
+router.get('/freeroom/detail/:room_id', FreeroomController.detail);
 // 删除
-// router.delete('/freeroom/delete/:room_id', FreeroomController.delete);
+router.delete('/freeroom/delete/:room_id', FreeroomController.delete);
 // 更改
-// router.post('/freeroom/update/:room_id', FreeroomController.update);
+router.post('/freeroom/update/:room_id', FreeroomController.update);
 
 
+//空闲琴房
+router.post('/book/create', BookController.create);
 //空闲琴房
 // router.get('/book/list', BookController.getuserbooklist);
 //获取用户订单列表
@@ -57,36 +61,8 @@ router.get('/book/getuserbooklist/:id', BookController.getuserbooklist);
 router.post('/book/update', BookController.update);
 //空闲琴房
 router.get('/book/list/:freeroom_id', BookController.getsinglerbooklist);
-/**
- * 文章接口
- */
-// 创建文章
-router.post('/article/create', ArticleController.create);
-// 获取文章详情
-router.get('/article/detail/:id', ArticleController.detail);
-// 删除文章
-router.delete('/article/delete/:id', ArticleController.delete);
-// 更改文章
-router.put('/article/update/:id', ArticleController.update);
-// 获取文章列表
-router.get('/article/list', ArticleController.list);
-// 搜索文章
-router.get('/article/search', ArticleController.search);
 
-/**
- * 分类接口
- */
-// 创建分类
-router.post('/category/create', CategoryController.create);
-// 获取分类详情
-router.get('/category/detail/:id', CategoryController.detail);
-// 删除分类
-router.delete('/category/delete/:id', CategoryController.delete);
-// 更改分类
-router.put('/category/update/:id', CategoryController.update);
-// 获取分类列表
-router.get('/category/list', CategoryController.list);
-// 查询分类ID下的所有文章列表
-router.get('/category/article/list/:id', CategoryController.getCategoryArticle);
+
+
 
 module.exports = router
