@@ -1,0 +1,30 @@
+[2019-02-28T15:50:46.231] [ERROR] errorLogger - 
+*************** error log start ***************
+request method: POST
+request originalUrl:  /api/v1/user/update/1
+request client ip:  ::1
+request body: 
+undefined
+response time: 1
+err name: UnauthorizedError
+err message: Authentication Error
+err stack: UnauthorizedError: Authentication Error
+    at Object.throw (C:\Users\yao\Desktop\nodejs-koa2-mysql-sequelize-jwt-master\node_modules\koa\lib\context.js:93:11)
+    at jwt (C:\Users\yao\Desktop\nodejs-koa2-mysql-sequelize-jwt-master\node_modules\koa-jwt\lib\index.js:53:26)
+*************** error log end ***************
+
+[2019-02-28T15:59:58.042] [ERROR] errorLogger - 
+*************** error log start ***************
+request method: POST
+request originalUrl:  /api/v1/user/update/1
+request client ip:  ::1
+request body: 
+undefined
+response time: 0
+err name: UnauthorizedError
+err message: Authentication Error
+err stack: UnauthorizedError: Authentication Error
+    at Object.throw (C:\Users\yao\Desktop\nodejs-koa2-mysql-sequelize-jwt-master\node_modules\koa\lib\context.js:93:11)
+    at jwt (C:\Users\yao\Desktop\nodejs-koa2-mysql-sequelize-jwt-master\node_modules\koa-jwt\lib\index.js:53:26)
+*************** error log end ***************
+
