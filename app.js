@@ -10,6 +10,9 @@ const cors = require('koa-cors');
 const index = require('./routes/index')
 const secret = require('./config/secret')
 const err = require('./middlreware/error')
+const https = require('https');
+const crypto = require('crypto')
+const fs = require("fs")
 //log工具
 const { applogger, accessLogger } = require('./config/log4j');
 
@@ -20,7 +23,7 @@ onerror(app)
 app.use(err())
 app.use(cors());
 // logger
-app.use(require('koa-static')(__dirname + '/public'))
+
 app.use(accessLogger());
 app.on('error', err => {
     applogger.error(err);
@@ -39,12 +42,14 @@ app.use(jwt({secret: secret.sign}).unless({
         /^\/api\/v1\/user\/register/,
         // 分类列表
         /^\/api\/v1\/category\/list/,
-        // 空闲琴房
+        // 分类列表
         /^\/api\/v1\/freeroom\/list/,
         // 文章搜索
         /^\/api\/v1\/article\/search/,
         // 分类
-        /^\/api\/v1\/category\/article\/list/
+        /^\/api\/v1\/category\/article\/list/,
+        // test
+        /^\/api\/v1\/article\/test/,
     ]
 }))
 
@@ -54,7 +59,7 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-
+app.use(require('koa-static')(__dirname + '/public'))
 
 
 // app.use(async (ctx, next) => {
@@ -106,10 +111,12 @@ app.listen(8082)
 // const privateKey = fs.readFileSync('../../../1835602_www.scixlab.cn.key').toString();
 // const certificate = fs.readFileSync('../../../1835602_www.scixlab.cn.pem').toString();
 // SSL options
-// var options = {
-//     key: fs.readFileSync('../../../1835602_www.scixlab.cn.key'),  //ssl文件路径
-//     cert: fs.readFileSync('../../../1835602_www.scixlab.cn.pem')  //ssl文件路径
-// };
-// https.createServer(options, app.callback()).listen(8083);
+var options = {
+    key: fs.readFileSync('../../../1835602_www.scixlab.cn.key'),  //ssl文件路径
+    cert: fs.readFileSync('../../../1835602_www.scixlab.cn.pem')  //ssl文件路径
+};
+https.createServer(options, app.callback()).listen(8083);
+
+
 
 module.exports = app

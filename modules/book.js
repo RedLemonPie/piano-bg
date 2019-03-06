@@ -6,7 +6,7 @@ const Book = Sequelize.import('../schema/book');
 const Pianoroom = Sequelize.import('../schema/pianoRoom');
 
 Book.hasOne(Pianoroom, {foreignKey: 'room_id'});
-Book.hasMany(FreeRoom, {foreignKey: 'freeroom_id'});
+Book.belongsTo(FreeRoom, {foreignKey: 'freeroom_id'});
 Book.sync({force: false});
 
 
